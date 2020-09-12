@@ -1,11 +1,12 @@
-f = open("text.txt", "r")
-text = [str(s) for s in (f.read().replace('.', '').replace(',', '').replace('-', '').replace('!', '').replace('?', '').lower()).split()]
-#print number of words in file
-print(len(text))
+f = open('textIn.txt', 'r')
+text = f.read()
+listWords = [str(s) for s in (text.replace('.', '').replace(',', '').replace('-', '').replace('!', '').replace('?', '').lower()).split()]
+# print number of words in file
+print(len(listWords))
 
-#search popular words
+# search popular words
 dictWords = {}
-for i in text:
+for i in listWords:
     if i in dictWords:
         dictWords[i] += 1
     else:
@@ -18,7 +19,30 @@ for i in range(10):
     listKeys.pop(listValues.index(max(listValues)))
     listValues.pop(listValues.index(max(listValues)))
 
-#reverse of sentances
+# reverse of sentances
+fOut = open('textOut.txt', 'w')
+listWordsWithPunctuationMark = [str(s) for s in (text.replace('.', ' .').replace('!', ' !').replace('?', ' ?')).split()]
+left = 0
+right = -1
+i = 0
+print(listWordsWithPunctuationMark)
+while i != len(listWordsWithPunctuationMark):
+    count = 0
+    while listWordsWithPunctuationMark[i] != '.' and listWordsWithPunctuationMark[i] != '!' and listWordsWithPunctuationMark[i] !='?':
+        i += 1
+    else:
+        left = right
+        right = i
+        print(listWordsWithPunctuationMark[i])
+    print(left, right)
+    for j in range(right, left, -1):
+        fOut.write(listWordsWithPunctuationMark[j] + ' ')
+    i += 1
+
+
+
+
+
 
 
 
