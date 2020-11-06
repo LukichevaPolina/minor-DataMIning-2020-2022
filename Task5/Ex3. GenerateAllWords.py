@@ -1,12 +1,11 @@
-def generate_words(word):
-    count_words = count_number_words(word)
-    words = []
-    word = sorted(word)
-    print(word)
+def generate_words(w):
+    count_words = count_number_words(w)
+    words = ['']*count_words
+    w = sorted(w)
     num = 0
-    w = word
-    words.append(word)
-    while num < count_words - 1:
+    words[num] = ''.join(w)
+    num += 1
+    while num < count_words:
         max_i = 0
         for i in range(len(w) - 1):
             if i > max_i and w[i] <  w[i+1]:
@@ -19,10 +18,7 @@ def generate_words(word):
 
         w[max_i], w[max_j] = w[max_j], w[max_i]
         w = w[:max_i+1] + w[len(w) - 1:max_i: - 1]
-        print(w)
-
-        words.append(w)
-        print(words)
+        words[num] = ''.join(w)
         num += 1
 
     return words
@@ -54,4 +50,4 @@ def fact(num):
     return result
 
 
-print(generate_words('abac'))
+print(generate_words('acb'))
