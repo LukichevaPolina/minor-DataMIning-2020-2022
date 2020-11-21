@@ -17,8 +17,26 @@ def DefineHemicphere(data, parametr, border1, border2):
     filtr = data[(data[parametr] >= border1) & (data[parametr] <= border2)]
     return filtr
 
+
 def Top10TwoParametrs(data, parametr1, parametr2):
     return data.sort_values(by=[parametr1, parametr2]).tail(10)
+
+
+def TheMostHemicsphere(north, south, east, west, parametr):
+    max_v = max(north[parametr].mean(), south[parametr].mean(), east[parametr].mean(), west[parametr].mean())
+    if max_v == north[parametr].mean():
+        return 'northen'
+    elif max_v == south[parametr].mean():
+        return 'southen'
+    elif max_v == east[parametr].mean():
+        return 'easten'
+    return 'westen'
+
+
+def FurtherPoint(data):
+    a = 0
+    #дописать
+
 
 
 data = pandas.read_csv(r"quake.csv")
@@ -44,3 +62,6 @@ print('Top-10 by deph and richter:\n', Top10TwoParametrs(east, 'Focal depth', 'R
 print('\nWesten hemicphere had ', len(west), ' quakes')
 print('Top-10 by deph and richter:\n', Top10TwoParametrs(west, 'Focal depth', 'Richter'))
 
+print('\nThe most depht hemocphere is', TheMostHemicsphere(north, south, east, west, 'Focal depth'))
+print('\nThe most rechter hemocphere is', TheMostHemicsphere(north, south, east, west, 'Richter'))
+print('\nThe further earthquake has coordinates:', FurtherPoint(data))
