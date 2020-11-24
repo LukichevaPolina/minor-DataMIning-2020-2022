@@ -1,0 +1,4 @@
+Name,Surname,Phone,Birthday
+Tamara,Lukicheva,89302933509
+Polina,Lukicheva,89307122950
+Elena,Lukicheva,89107924033,1968-01-28
