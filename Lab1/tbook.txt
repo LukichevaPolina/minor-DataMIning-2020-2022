@@ -1,4 +1,7 @@
 Name,Surname,Phone,Birthday
-Tamara,Lukicheva,89302933509
-Polina,Lukicheva,89307122950
+Tamara,Lukicheva,89302933509,
+Polina,Lukicheva,89307122950,
 Elena,Lukicheva,89107924033,1968-01-28
+Grigiry,Tarelov,89051955195,2000-02-17
+Polina,Skorocpelkina,89081746246,2001-01-08
+Polincka,Hfhffjfjf,815276,

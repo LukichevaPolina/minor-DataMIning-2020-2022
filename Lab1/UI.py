@@ -18,14 +18,20 @@ while (True):
         TelephoneNumbers.PrintString(tb, res)
     elif command == '3':
         tb = TelephoneNumbers.DeleteEntry(tb)
+        TelephoneNumbers.Save(tb, 'tbook.txt')
     elif command == '4':
-        td = TelephoneNumbers.NewEntry(tb)
+        tb = TelephoneNumbers.NewEntry(tb)
+        TelephoneNumbers.Save(tb, 'tbook.txt')
     elif command == '5':
         tb = TelephoneNumbers.Rewrite(tb)
+        TelephoneNumbers.Save(tb, 'tbook.txt')
     elif command == '6':
-        TelephoneNumbers.AgePerson(tb)
+        age = TelephoneNumbers.AgePerson(tb)
+        if age:
+            print('The age of person: ', age)
     elif command == '7':
-        TelephoneNumbers.SaveExit(tb, 'tbook.txt')
+        TelephoneNumbers.Save(tb, 'tbook.txt')
+        exit('Good bye!')
     else:
         print('Imposible Command. Try Again!')
 # except:

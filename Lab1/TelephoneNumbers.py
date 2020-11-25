@@ -10,9 +10,9 @@ def check(name):
     if (not set(".,:;!_*-+()/\'\"#¤%&)").isdisjoint(name)):
         print('Name must not contain special characters. Try again')
         return '-'
-    if name[0].islower():
-        return name.title()
-    return name
+    return name.title()
+
+
 
 
 def checkPhone(phone):
@@ -62,6 +62,7 @@ def NewEntry(tb):
         return tb
     res = FindEntry(tb, inp[0]+' '+inp[1])
     if len(res) == 0:
+        print(inp[0], inp[1])
         inp[0] = check(inp[0])
         inp[1] = check(inp[1])
         inp[2] = checkPhone(inp[2])
@@ -173,10 +174,27 @@ def Rewrite(tb):
     return tb
 
 
+def AgePerson(tb):
+    inp = [x for x in input('Enter name and surname: ').split()]
+    if len(inp) != 2:
+        print('Incorrect number of values')
+        return
+    if check(inp[0]) == '-' and check(inp[1]) == '-':
+        print('Incorrect name or surname. Try again')
+        return
+    res = FindEntry(tb, inp[0] + ' ' + inp[1])
+    if len(res) == 0:
+        return
+
+    if tb.loc[res[0], 'Birthday'] == np.nan:
+        print('Day of birthday do not write')
+        return
+    bday = datetime.datetime.strptime(tb.loc[res[0], 'Birthday'], '%Y-%m-%d')
+    return (datetime.datetime.today() - bday).days // 365
 
 
-def SaveExit(tb, path):
-    tb.to_csv(path)
-    exit()
+def Save(tb, path):
+    tb.to_csv(path, index=False)
+
 
 
