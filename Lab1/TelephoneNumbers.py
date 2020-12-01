@@ -5,14 +5,12 @@ import datetime
 
 def check(name):
     if name[0].isnumeric():
-        print('Incorrect value. First letter must be upper. Try again')
+        print('Incorrect value. First letter must be upper. Try again!')
         return '-'
     if (not set(".,:;!_*-+()/\'\"#¤%&)").isdisjoint(name)):
-        print('Name must not contain special characters. Try again')
+        print('Name must not contain special characters. Try again!')
         return '-'
     return name.title()
-
-
 
 
 def checkPhone(phone):
@@ -21,10 +19,10 @@ def checkPhone(phone):
         phone = phone.replace('+7', '8', 1)
     if (phone[0]=='7'):
         phone = phone.replace('7', '8', 1)
-    if len(phone) > 11 or phone[0] != '8' or not(phone.isnumeric()):
-        print('Incorrect number. Try again!')
-        return '-'
-    return phone
+    if len(phone) == 11 and phone[0] == '8' and phone.isnumeric():
+        return phone
+    print('Incorrect number. Try again!')
+    return '-'
 
 
 def checkDate(date):
@@ -32,7 +30,7 @@ def checkDate(date):
         datetime.datetime.strptime(date, '%Y-%m-%d')
         return date
     except ValueError:
-        print('Incorrect data format. Try again')
+        print('Incorrect data format. Try again!')
         return '-'
 
 
@@ -53,7 +51,9 @@ def PrintPhoneBook(tb):
 
 
 def NewEntry(tb):
-    inp = [x for x in (input('Enter: NAME SURNAME PHONE (BIRTHDAY)').split(' '))]
+    inp = [x for x in (input('Enter name, surname, number of phone, (birthday YYYY-MM-DD), separated by space: ').split(' '))]
+    while '' in inp:
+        inp.remove('')
     if len(inp) < 3:
         print('Not enough values. Try again!')
         return tb
@@ -62,7 +62,6 @@ def NewEntry(tb):
         return tb
     res = FindEntry(tb, inp[0]+' '+inp[1])
     if len(res) == 0:
-        print(inp[0], inp[1])
         inp[0] = check(inp[0])
         inp[1] = check(inp[1])
         inp[2] = checkPhone(inp[2])
@@ -76,7 +75,7 @@ def NewEntry(tb):
             tb.loc[len(tb.index)] = inp
             print('Entry was added!')
     else:
-        print('Entry with this name and surname is already in the dictionary')
+        print('Record with this name and surname is already in the dictionary')
         print('[1] - rewrite record')
         print('[something] - return to main menu')
         action = input()
@@ -87,19 +86,21 @@ def NewEntry(tb):
 
 
 def DeleteEntry(tb):
-    result = FindEntry(tb, input('Enter something: '))
+    result = FindEntry(tb, input('Enter the fields which you want to delete the record, separated by space: '))
     if len(result) == 0:
         return tb
     PrintString(tb, result)
     if len(result) > 1:
-        inp = input('Choose records, that you want to delete. Enter numbers of strings: ')
+        inp = input('Choose records, that you want to delete. Enter numbers of strings, separated by space: ')
         inp = [x for x in inp.split(' ')]
+        while '' in inp:
+            inp.remove('')
         for i in range(len(inp)):
             if not(inp[i].isnumeric()):
-                print('Enter only numbers! Try again')
+                print('Enter only numbers. Try again!')
                 return tb
             if not(int(inp[i]) in result):
-                print('Invalid string value. Try again')
+                print('Invalid string value. Try again!')
                 return tb
             inp[i] = int(inp[i])
     else:
@@ -110,40 +111,38 @@ def DeleteEntry(tb):
     return tb
 
 
-def FindEntry(tb, str):
-    inp = str.split(' ')
+def FindEntry(tb, string):
+    inp = string.split(' ')
+    while '' in inp:
+        inp.remove('')
 
     if len(inp) > 4:
-        print("To many arguments. Try again")
+        print("To many arguments. Try again!")
         return []
-
-    df1 = tb.values == '-'
-    #замена первых букв на заглавные
     for i in range(len(inp)):
         inp[i] = inp[i][0].upper() + inp[i][1:]
-
-    #поиск в df
+    # поиск в teleponebook
+    result_find = tb.values == '-'
     for x in inp:
         if x.isnumeric():
             x = int(x)
-        df2 = tb.values == x
-        for i in range(len(df1)):
-            for j in range(len(df1[i])):
-                if df1[i][j] == False and df2[i][j] == True:
-                    df1[i][j] = df2[i][j]
-
+        find_x = tb.values == x
+        for i in range(len(result_find)):
+            for j in range(len(result_find[i])):
+                if not(result_find[i][j]) and find_x[i][j]:
+                    result_find[i][j] = find_x[i][j]
+    # получение результата
     result = []
-    #получение результата
-    for i in range(len(df1)):
+    for i in range(len(result_find)):
         count = 0
-        for j in range(len(df1[i])):
-            if df1[i][j] == True:
+        for j in range(len(result_find[i])):
+            if result_find[i][j]:
                 count += 1
         if count == len(inp):
             result.append(i)
 
     if len(result) == 0:
-        print('The record is not found\n')
+        print('The record is not found in telephonebook')
     return result
 
 
@@ -151,16 +150,16 @@ def Rewrite(tb):
     PrintPhoneBook(tb)
     inp = [x for x in input('Choose number row and name of column. Enter separated by a space: ').split()]
     if len(inp) != 2:
-        print('Invaliid number of parametrs. Try again')
+        print('Invalid number of parametrs. Try again!')
     row, col = inp[0], inp[1]
     if inp[0].isalpha() and inp[1].isnumeric():
        row, col = inp[1], inp[0]
     row = int(row)
     if 0 > row > len(tb.index):
-        print('Incorrect value of row. Try again')
+        print('Incorrect value of row. Try again!')
         return tb
     if not(col in tb.columns.values):
-        print('Incorrect value of column. Try again')
+        print('Incorrect value of column. Try again!')
         return tb
     rewrite = input('Enter value: ')
     if col == 'Name' or col == 'Surname':
@@ -175,12 +174,12 @@ def Rewrite(tb):
 
 
 def AgePerson(tb):
-    inp = [x for x in input('Enter name and surname: ').split()]
+    inp = [x for x in input('Enter name and surname, separated by space: ').split()]
     if len(inp) != 2:
-        print('Incorrect number of values')
+        print('Incorrect number of values. Try again!')
         return
     if check(inp[0]) == '-' and check(inp[1]) == '-':
-        print('Incorrect name or surname. Try again')
+        print('Incorrect name or surname. Try again!')
         return
     res = FindEntry(tb, inp[0] + ' ' + inp[1])
     if len(res) == 0:
@@ -191,6 +190,60 @@ def AgePerson(tb):
         return
     bday = datetime.datetime.strptime(tb.loc[res[0], 'Birthday'], '%Y-%m-%d')
     return (datetime.datetime.today() - bday).days // 365
+
+
+def Birthday(tb):
+    print('People who has birthday in next 30 days:')
+    res = []
+    today = datetime.datetime.today()
+    rows = 0
+    for day in tb['Birthday']:
+        if str(day) != 'nan':
+            bday = datetime.datetime.strptime(str(day), '%Y-%m-%d')
+            bday_in_year = datetime.datetime(today.year, bday.month, bday.day)
+            if 0 <= (bday_in_year - today).days <= 30:
+                res.append(rows)
+        rows += 1
+    if res:
+        PrintString(tb, res)
+    else:
+        print('No one has a birthday :_(')
+
+
+def Years(tb, years):
+    if not years.isnumeric():
+        print('You enter not number. Try again!')
+        return None
+    print(' Enter:')
+    print('[<] - if you want to see people who younger ', years, ' years')
+    print('[=] - if you want to see people who ', years, ' years')
+    print('[>] - if you want to see people who elder ', years, ' years')
+    comparator = input()
+    if comparator != '>' and comparator != '=' and comparator != '<':
+        print('Imposible command. Try again!')
+        return None
+    res = []
+    rows = 0
+    for day in tb['Birthday']:
+        if str(day) != 'nan':
+            bday = datetime.datetime.strptime(str(day), '%Y-%m-%d')
+            age = (datetime.datetime.today() - bday).days // 365
+            if Compare(age, years, comparator):
+                res.append(rows)
+        rows += 1
+    if res:
+        PrintString(tb, res)
+    else:
+        print('No one was found :_(' )
+
+
+def Compare(age, years, comporator):
+    if comporator == '=':
+        return age == years
+
+    if comporator == '>':
+        return age > years
+    return age < years
 
 
 def Save(tb, path):
