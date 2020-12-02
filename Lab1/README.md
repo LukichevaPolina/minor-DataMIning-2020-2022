@@ -1,5 +1,5 @@
-# :telephone_receiver: PhoneBook :telephone_receiver:
-Лабораторная работа 1 по интеллектуальному анализу данных
+# :telephone_receiver: :notebook_with_decorative_cover: PhoneBook  :notebook_with_decorative_cover: :telephone_receiver:
+Первая лабораторная работа по интеллектуальному анализу данных
 ## Инструкция для запуска программы:
 Для корректного запуска программы в командной строке необходимо ввести
 ```
