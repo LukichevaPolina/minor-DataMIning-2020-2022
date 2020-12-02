@@ -1,4 +1,4 @@
-:telephone_receiver:# PhoneBook:telephone_receiver:
+# :telephone_receiver: PhoneBook:telephone_receiver:
 Лабораторная работа 1 по интеллектуальному анализу данных
 ## Инструкция для запуска программы:
 Для корректного запуска программы в командной строке необходимо ввести
